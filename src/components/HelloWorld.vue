@@ -23,6 +23,9 @@
     $ nscli query nameservice whois SOME_DOMAIN \
     --chain-id testchain --node=node.talkshop.name:26657
     </textarea>
+    <br>
+    Add your account <a href="https://goo.gl/forms/6OFVtc2eDIbVxofU2" target="_blank">here</a> to get some money!
+
   </div>
 </template>
 
@@ -62,6 +65,7 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: white;
+  text-decoration: none;
 }
 </style>
