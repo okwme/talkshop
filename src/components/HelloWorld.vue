@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
-    <textarea spellcheck="false">
-    # query an account
+    <textarea spellcheck="false">  # query an account
     $ nscli query account $(nscli keys show YOUR_NAME --address) \
     --indent --chain-id testchain --node=node.talkshop.name:26657
 
@@ -21,12 +20,7 @@
 
     # get the whole whois of a name
     $ nscli query nameservice whois SOME_DOMAIN \
-    --chain-id testchain --node=node.talkshop.name:26657
-    </textarea>
-    <br>
-    Add your account <a href="https://goo.gl/forms/6OFVtc2eDIbVxofU2" target="_blank">here</a> to get some money!
-
-  </div>
+    --chain-id testchain --node=node.talkshop.name:26657</textarea></div>
 </template>
 
 <script>
@@ -53,12 +47,15 @@ textarea {
   text-align: left;
   width: 100%;
   max-width:580px;
-  height:420px;
+  height:400px;
   font-size:14px;
   font-family: monospace;
   padding:20px;
   line-height:1.4em;
-  color: rgb(60, 60, 60);
+  background-color: grey;
+  color:white;
+  border:0px;
+  border-radius: 20px;
 }
 li {
   display: inline-block;
