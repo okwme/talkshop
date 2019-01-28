@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
-    <textarea spellcheck="false">  # create an account for yourself
+    <textarea spellcheck="false">
+  # create an account for yourself
     $ nscli keys add YOUR_NAME
 
       # query an account
@@ -8,13 +9,13 @@
     --indent --chain-id namechain --node=node.talkshop.name:26657
 
       # send some money
-    $ nscli tx send --amount 1mycoin \
+    $ nscli tx send --amount 1nametoken \
     --chain-id namechain  --node=node.talkshop.name:26657 \
     --from $(nscli keys show YOUR_NAME --address) \
     --to $(nscli keys show THEIR_NAME --address)
 
     # buy a name!
-    $ nscli tx nameservice buy-name SOME_DOMAIN 5mycoin \
+    $ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
     --from     $(nscli keys show YOUR_NAME --address) \
     --chain-id namechain --node=node.talkshop.name:26657
 
@@ -29,7 +30,9 @@
 
     # get the whole whois of a name
     $ nscli query nameservice whois SOME_DOMAIN \
-    --chain-id namechain --node=node.talkshop.name:26657</textarea></div>
+    --chain-id namechain --node=node.talkshop.name:26657</textarea
+    >
+  </div>
 </template>
 
 <script>
@@ -45,7 +48,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 ul {
@@ -55,15 +59,15 @@ ul {
 textarea {
   text-align: left;
   width: 100%;
-  max-width:580px;
-  height:400px;
-  font-size:14px;
+  max-width: 580px;
+  height: 400px;
+  font-size: 14px;
   font-family: monospace;
-  padding:20px;
-  line-height:1.4em;
+  padding: 20px;
+  line-height: 1.4em;
   background-color: grey;
-  color:white;
-  border:0px;
+  color: white;
+  border: 0px;
   border-radius: 20px;
 }
 li {
