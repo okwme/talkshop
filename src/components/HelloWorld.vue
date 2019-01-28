@@ -16,31 +16,31 @@
 
     # query an account
     $ nscli query account $(nscli keys show YOUR_NAME --address) \
-    --indent --chain-id namechain --node=node.talkshop.name:26657
+    --indent --chain-id namechain --node=cli.talkshop.name:26657
 
     # send some money
     $ nscli tx send --amount 1nametoken \
-    --chain-id namechain  --node=node.talkshop.name:26657 \
+    --chain-id namechain  --node=cli.talkshop.name:26657 \
     --from $(nscli keys show YOUR_NAME --address) \
     --to $(nscli keys show THEIR_NAME --address)
 
     # buy a name!
     $ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
     --from     $(nscli keys show YOUR_NAME --address) \
-    --chain-id namechain --node=node.talkshop.name:26657
+    --chain-id namechain --node=cli.talkshop.name:26657
 
     # set a resolver
     $ nscli tx nameservice set-name SOME_DOMAIN SOME_VALUE\
     --from     $(nscli keys show YOUR_NAME --address) \
-    --chain-id namechain --node=node.talkshop.name:26657
+    --chain-id namechain --node=cli.talkshop.name:26657
 
     # resolve a name
     $ nscli query nameservice resolve SOME_DOMAIN \
-    --chain-id namechain --node=node.talkshop.name:26657
+    --chain-id namechain --node=cli.talkshop.name:26657
 
     # get the whole whois of a name
     $ nscli query nameservice whois SOME_DOMAIN \
-    --chain-id namechain --node=node.talkshop.name:26657</textarea
+    --chain-id namechain --node=cli.talkshop.name:26657</textarea
     >
   </div>
 </template>
@@ -48,7 +48,7 @@
 <script>
 export default {
   name: 'HelloWorld',
-  data () {
+  data() {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
