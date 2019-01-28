@@ -1,14 +1,24 @@
 <template>
   <div class="hello">
     <textarea spellcheck="false">
-  # create an account for yourself
+                _  _ __, _,   _,  _, _, _ __,   ___  _,
+                |  | |_  |   / ` / \ |\/| |_     |  / \
+                |/\| |   | , \ , \ / |  | |      |  \ /
+                ~  ~ ~~~ ~~~  ~   ~  ~  ~ ~~~    ~   ~
+
+            ___  _, _,  _,_  _, _,_  _, __,  _, _  _, _, _ __,
+             |  /_\ |   |_/ (_  |_| / \ |_)  |\ | /_\ |\/| |_
+             |  | | | , | \ , ) | | \ / |  , | \| | | |  | |
+             ~  ~ ~ ~~~ ~ ~  ~  ~ ~  ~  ~  ~ ~  ~ ~ ~ ~  ~ ~~~
+
+    # create an account for yourself
     $ nscli keys add YOUR_NAME
 
-      # query an account
+    # query an account
     $ nscli query account $(nscli keys show YOUR_NAME --address) \
     --indent --chain-id namechain --node=node.talkshop.name:26657
 
-      # send some money
+    # send some money
     $ nscli tx send --amount 1nametoken \
     --chain-id namechain  --node=node.talkshop.name:26657 \
     --from $(nscli keys show YOUR_NAME --address) \
