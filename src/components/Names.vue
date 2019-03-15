@@ -70,11 +70,10 @@ export default {
       let res = await axios.get(
         'https://node.talkshop.name/nameservice/names/' + name + '/whois'
       )
-      console.log(res.data)
-      this.whois[name] = Object.assign({}, this.whois[name], res.data)
-      console.log('checkname loading = false')
+      // this.whois[name] = Object.assign({}, this.whois[name], res.data)
+
+      this.$set(this.whois, name, res.data)
       this.loading = false
-      console.timeEnd()
     }
   }
 }
