@@ -2,7 +2,7 @@
   <div id="names">
     <div :key="name" v-for="name in names">
       <h2>{{ name }}</h2>
-      <div class="left-align" v-if="whois[name] && !loading">
+      <div class="left-align" v-if="whois[name]">
         <b>Value: </b>{{ whois[name].value || 'N/A' }}<br />
         <b>Owner: </b>{{ whois[name].owner }}<br />
         <b>Price:&nbsp;&nbsp;&nbsp;</b>{{ whois[name].price[0].amount }}
