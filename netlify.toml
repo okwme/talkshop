@@ -2,7 +2,7 @@
 [build]
   command = "yarn build"
   functions = "lambda" #  netlify-lambda reads this
-  publish = "lambda-build"
+  publish = "functions"
 
 # [[redirects]]
 #   from = "/faucet/:address"
