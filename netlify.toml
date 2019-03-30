@@ -1,0 +1,20 @@
+# example netlify.toml
+[build]
+  command = "yarn build"
+  functions = "lambda" #  netlify-lambda reads this
+  publish = "lambda-build"
+
+# [[redirects]]
+#   from = "/faucet/:address"
+#   to = "/.netlify/functions/faucet?address=:address"
+#   status = 200
+
+[[redirects]]
+  from = "/faucet"
+  to = "/.netlify/functions/faucet"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
