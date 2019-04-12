@@ -89,5 +89,7 @@ h2 {
 }
 #names {
   padding-bottom: 150px;
+  max-height: calc(100vh - 383px);
+  overflow: auto;
 }
 </style>
