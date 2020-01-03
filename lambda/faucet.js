@@ -1,50 +1,17 @@
-const axios = require('axios')
+// const axios = require('axios')
 require('dotenv').config()
 
-const {
-  // createCosmosAddress,
-  sign,
-  // createSignature,
-  // createSignMessage,
-  generateWalletFromSeed,
-  // generateSeed,
-  // generateWallet,
-  createSignedTx
-  // createBroadcastBody
-} = require('js-cosmos-wallet')
-// const GoogleRecaptcha = require('google-recaptcha')
-// const googleRecaptcha = new GoogleRecaptcha({
-//   secret: process.env.GOOGLE
-// })
-const restEndpoint = 'http://localhost:1317'
-let tx = {
-  'msg': [
-    {
-      'type': 'cosmos-sdk/MsgSend',
-      'value': {
-        'from_address': process.env.ADDRESS,
-        'to_address': null,
-        'amount': [
-          {
-            'denom': 'nametoken',
-            'amount': '1'
-          }
-        ]
-      }
-    }
-  ],
-  'fee': {
-    'amount': [
-      {
-        'denom': 'nametoken',
-        'amount': '1'
-      }
-    ],
-    'gas': '200000'
-  },
-  'signatures': null,
-  'memo': ''
-}
+const GoogleRecaptcha = require('google-recaptcha')
+const googleRecaptcha = new GoogleRecaptcha({
+  secret: process.env.GOOGLE
+})
+const cosmosjs = require('@cosmostation/cosmosjs')
+const chainId = process.env.CHAINID
+const restEndpoint = process.env.URL
+const cosmos = cosmosjs.network(restEndpoint, chainId)
+cosmos.setPath("m/44'/118'/0'/0/0")
+const address = cosmos.getAddress(process.env.MNEMONIC)
+const ecpairPriv = cosmos.getECPairPriv(process.env.MNEMONIC)
 exports.handler = async function (event, context) {
   // let headers = {
   //   'Access-Control-Allow-Origin': '*',
@@ -52,66 +19,67 @@ exports.handler = async function (event, context) {
   //   'Access-Control-Allow-Headers':
   //     'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
   // }
-  // if (event.httpMethod === 'POST') {
-  // if (event.body) {
-  // let body = JSON.parse(event.body)
-  let recepient = 'cosmos1rug63vk7tr6nha8aw55v9geg88v3pgp74n90te' // body.recepient
-  // let recaptchaResponse = body.recaptchaToken
-  // let error = await new Promise((resolve, reject) => {
-  //   googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
-  //     if (error) { reject(error) } else { resolve() }
-  //   })
-  // })
-  // if (error) {
-  //   console.error(error)
-  //   return {
-  //     statusCode: 400,
-  //     body: error.message
-  //   }
-  // } else {
-  try {
-    // prepare tx
-    const wallet = generateWalletFromSeed(process.env.MNEMONIC)
-    const requestMetadata = await getMetadata()
-    requestMetadata.chain_id = process.env.CHAIN_ID
-    tx.msg[0].value.to_address = recepient
-    tx = createSignedTx(tx, sign(tx, wallet, requestMetadata))
-    let body = {
-      tx,
-      mode: 'block'
+  if (event.httpMethod === 'POST') {
+    if (event.body) {
+      let body = JSON.parse(event.body)
+      let recipient = body.recipient
+      let recaptchaResponse = body.recaptchaToken
+      let error = await new Promise((resolve, reject) => {
+        googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
+          if (error) { reject(error) } else { resolve() }
+        })
+      })
+      if (error) {
+        console.error(error)
+        return {
+          statusCode: 400,
+          body: error.message
+        }
+      } else {
+        try {
+          const data = await cosmos.getAccounts(address)
+          let stdSignMsg = cosmos.NewStdMsg({
+            type: 'cosmos-sdk/MsgSend',
+            from_address: address,
+            to_address: recipient,
+            amountDenom: 'nametoken',
+            amount: 1,
+            feeDenom: 'nametoken',
+            fee: 0,
+            gas: 200000,
+            memo: 'have a little nametoken',
+            account_number: data.result.value.account_number,
+            sequence: data.result.value.sequence
+          })
+          const signedTx = cosmos.sign(stdSignMsg, ecpairPriv)
+          const response = await cosmos.broadcast(signedTx)
+          return {
+            statusCode: 200,
+            body: JSON.stringify(response)
+          }
+        } catch (error) {
+          return handleAxiosError(error)
+        }
+      }
+    } else {
+      return {
+        statusCode: 404,
+        body: '¯\\_(ツ)_/¯'
+      }
     }
-    // send tx
-    let res = await axios
-      .post(
-        restEndpoint + '/txs',
-        body
-      )
+  } else {
     return {
-      statusCode: res.status,
-      body: JSON.stringify(res.data)
+      statusCode: 200,
+      body: ':)'
     }
-  } catch (error) {
-    return handleAxiosError(error)
   }
-  // }
-  // } else {
-  //   return {
-  //     statusCode: 404,
-  //     body: '¯\\_(ツ)_/¯'
-  //   }
-  // }
-  // } else {
-  //   return {
-  //     statusCode: 200,
-  //     body: ':)'
-  //   }
-  // }
 }
 
-async function getMetadata () {
-  let response = await axios.get(restEndpoint + '/auth/accounts/' + process.env.ADDRESS)
-  return response.data.result.value
-}
+// async function getMetadata () {
+//   let response = await axios.get(restEndpoint + '/auth/accounts/' + process.env.ADDRESS)
+//   // console.log(response.data.result)
+//   return response.data
+// }
 
 function handleAxiosError (error) {
   console.error(error)

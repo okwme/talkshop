@@ -86,7 +86,7 @@ export default {
       self.$refs.recaptcha.reset()
       try {
         let response = await axios.post('/faucet', {
-          recepient: self.address,
+          recipient: self.address,
           recaptchaToken: recaptchaToken
         })
         if (response.status === 200) {

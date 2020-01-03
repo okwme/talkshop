@@ -12,10 +12,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "@cosmostation/cosmosjs": "https://github.com/okwme/cosmosjs#ca0f94398df732a3776b935f69840e194fb678f4",
     "dotenv": "^7.0.0",
     "google-recaptcha": "^1.1.0",
-    "js-cosmos-wallet": "^0.0.2",
     "vue": "^2.5.2",
     "vue-recaptcha": "^1.1.1",
     "vue-router": "^3.0.1"
