@@ -12,6 +12,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@lunie/cosmos-js": "^0.0.22",
+    "@lunie/cosmos-keys": "^0.0.12",
     "axios": "^0.18.0",
     "dotenv": "^7.0.0",
     "google-recaptcha": "^1.1.0",
