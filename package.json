@@ -13,7 +13,7 @@
     "proxy": "lcp --proxyUrl http://localhost:1317 --port 1318 --proxyPartial \"\""
   },
   "dependencies": {
-    "@cosmostation/cosmosjs": "https://github.com/okwme/cosmosjs#ca0f94398df732a3776b935f69840e194fb678f4",
+    "@cosmostation/cosmosjs": "https://github.com/cosmostation/cosmosjs#0.4.6",
     "@tendermint/sig": "^0.4.1",
     "axios": "^0.19.0",
     "dotenv": "^7.0.0",
