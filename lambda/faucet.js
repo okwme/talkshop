@@ -30,12 +30,12 @@ exports.handler = async function (event, context) {
       let body = JSON.parse(event.body)
       let recipient = body.recipient
       let recaptchaResponse = body.recaptchaToken
-      // let error = await new Promise((resolve, reject) => {
-      //   googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
-      //     if (error) { reject(error) } else { resolve() }
-      //   })
-      // })
-      if (false) { //error) {
+      let error = await new Promise((resolve, reject) => {
+        googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
+          if (error) { reject(error) } else { resolve() }
+        })
+      })
+      if (error) {
         console.error(error)
         return {
           statusCode: 400,
