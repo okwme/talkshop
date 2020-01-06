@@ -1,38 +1,23 @@
 const axios = require('axios')
 require('dotenv').config()
+
 const { createWalletFromMnemonic, createAddress, signTx, verifyTx } = require('@tendermint/sig');
 const wallet = createWalletFromMnemonic(process.env.MNEMONIC); // BIP39 mnemonic string
-// console.log({wallet})
 const address = createAddress(wallet.publicKey); // Buffer or Uint8Array
-// console.log({address})
-// const restEndpoint = process.env.URL
-const recipient = 'cosmos1pucaeg92vy9r6w8xl6dqcyca7a79uyd9nyua2y'
-// const GoogleRecaptcha = require('google-recaptcha')
-// const googleRecaptcha = new GoogleRecaptcha({
-//   secret: process.env.GOOGLE
-// })
-const tx = {
-  fee:  {
-      amount: [{ amount: '0', denom: 'nametoken' }],
-      gas:    '200000'
-  },
-  memo: '',
-  msgs: [{
-      type:  'cosmos-sdk/MsgSend',
-      value: {
-          amount:  [{ amount: '1', denom: 'nametoken' }],
-          from_address: address,
-          to_address: recipient
-      }
-  }]
-};
-const cosmosjs = require('@cosmostation/cosmosjs')
-const chainId = process.env.CHAINID
 const restEndpoint = process.env.URL
-const cosmos = cosmosjs.network(restEndpoint, chainId)
-cosmos.setPath("m/44'/118'/0'/0/0")
-// const address = cosmos.getAddress(process.env.MNEMONIC)
-const ecpairPriv = cosmos.getECPairPriv(process.env.MNEMONIC)
+
+const GoogleRecaptcha = require('google-recaptcha')
+const googleRecaptcha = new GoogleRecaptcha({
+  secret: process.env.GOOGLE
+})
+
+// // CosmosStation version
+// const cosmosjs = require('@cosmostation/cosmosjs')
+// const chainId = process.env.CHAINID
+// const cosmos = cosmosjs.network(restEndpoint, chainId)
+// cosmos.setPath("m/44'/118'/0'/0/0")
+// const ecpairPriv = cosmos.getECPairPriv(process.env.MNEMONIC)
+
 exports.handler = async function (event, context) {
   // let headers = {
   //   'Access-Control-Allow-Origin': '*',
@@ -40,95 +25,105 @@ exports.handler = async function (event, context) {
   //   'Access-Control-Allow-Headers':
   //     'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
   // }
-
-    const signMeta = await getMetadata(address)
-    // console.log({signMeta})
-    const stdTx = signTx(tx, signMeta, wallet); // Wallet or privateKey / publicKey pair; see example above
-    // console.log({stdTx})
-    const valid = verifyTx(stdTx, signMeta); // signed transaction and metadata; see example above
-    // console.log({valid})
-    if (!valid) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify(stdTx)
-      }
-    }
-    const submitTx = {
-      msg: stdTx.msgs,
-      fee: stdTx.fee,
-      memo: stdTx.memo,
-      signatures: stdTx.signatures
-    }
-    const body = {
-      tx: submitTx,
-      mode: 'sync'
-    }
-    // console.log({body})
-    const result = await axios.post(restEndpoint + '/txs', 
-      body
-    ).catch(error => {console.log({error})})
-    console.log({result: result.data})
-    // return {
-    //   statusCode: 200,
-    //   body: JSON.stringify(result)
-    // }
-  // if (event.httpMethod === 'POST') {
-  //   if (event.body) {
-  //     let body = JSON.parse(event.body)
-  //     let recipient = body.recipient
-  //     let recaptchaResponse = body.recaptchaToken
-  //     let error = await new Promise((resolve, reject) => {
-  //       googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
-  //         if (error) { reject(error) } else { resolve() }
-  //       })
-  //     })
-  //     if (error) {
-  //       console.error(error)
-  //       return {
-  //         statusCode: 400,
-  //         body: error.message
-  //       }
-  //     } else {
-  //       try {
-          const data = await cosmos.getAccounts(address)
-          let stdSignMsg = cosmos.NewStdMsg({
-            type: 'cosmos-sdk/MsgSend',
-            from_address: address,
-            to_address: recipient,
-            amountDenom: 'nametoken',
-            amount: 1,
-            feeDenom: 'nametoken',
-            fee: 0,
-            gas: 200000,
-            memo: '',
-            account_number: data.result.value.account_number,
-            sequence: data.result.value.sequence
-          })
-          // console.log({stdSignMsg})
-          const signedTx = cosmos.sign(stdSignMsg, ecpairPriv)
-          // console.log({signedTx})
-          const response = await cosmos.broadcast(signedTx)
-          console.log({response})
+  if (event.httpMethod === 'POST') {
+    if (event.body) {
+      let body = JSON.parse(event.body)
+      let recipient = body.recipient
+      let recaptchaResponse = body.recaptchaToken
+      // let error = await new Promise((resolve, reject) => {
+      //   googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
+      //     if (error) { reject(error) } else { resolve() }
+      //   })
+      // })
+      if (false) { //error) {
+        console.error(error)
+        return {
+          statusCode: 400,
+          body: error.message
+        }
+      } else {
+        try {
+          const result = await submitWithTendermintSig(recipient)
           return {
             statusCode: 200,
-            body: JSON.stringify({signedTx, body})
+            body: JSON.stringify(result.data)
           }
-  //       } catch (error) {
-  //         return handleAxiosError(error)
-  //       }
-  //     }
-  //   } else {
-  //     return {
-  //       statusCode: 404,
-  //       body: '¯\\_(ツ)_/¯'
-  //     }
-  //   }
-  // } else {
-  //   return {
-  //     statusCode: 200,
-  //     body: ':)'
-  //   }
-  // }
+        } catch (error) {
+          return handleAxiosError(error)
+        }
+      }
+    } else {
+      return {
+        statusCode: 404,
+        body: '¯\\_(ツ)_/¯'
+      }
+    }
+  } else {
+    return {
+      statusCode: 200,
+      body: ':)'
+    }
+  }
+}
+
+// async function submitWithCosmosStation(recipient) {
+//   const data = await cosmos.getAccounts(address)
+//   let stdSignMsg = cosmos.NewStdMsg({
+//     type: 'cosmos-sdk/MsgSend',
+//     from_address: address,
+//     to_address: recipient,
+//     amountDenom: 'nametoken',
+//     amount: 1,
+//     feeDenom: 'nametoken',
+//     fee: 0,
+//     gas: 200000,
+//     memo: '',
+//     account_number: data.result.value.account_number,
+//     sequence: data.result.value.sequence
+//   })
+//   const signedTx = cosmos.sign(stdSignMsg, ecpairPriv)
+//   const response = await cosmos.broadcast(signedTx)
+//   // console.log({response})
+//   return response
+// }
+
+async function submitWithTendermintSig(recipient) {
+  const tx = {
+    fee:  {
+        amount: [{ amount: '0', denom: '' }],
+        gas:    '200000'
+    },
+    memo: '',
+    msg: [{
+        type:  'cosmos-sdk/MsgSend',
+        value: {
+            amount:  [{ amount: '1', denom: 'nametoken' }],
+            from_address: address,
+            to_address: recipient
+        }
+    }]
+  };
+  const signMeta = (await getMetadata(address)).value
+  signMeta.chain_id = process.env.CHAINID
+  const stdTx = signTx(tx, signMeta, wallet); // Wallet or privateKey / publicKey pair; see example above
+  const valid = verifyTx(stdTx, signMeta); // signed transaction and metadata; see example above
+  if (!valid) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(stdTx)
+    }
+  }
+  const submitTx = {
+    msg: stdTx.msg,
+    fee: stdTx.fee,
+    memo: stdTx.memo,
+    signatures: stdTx.signatures
+  }
+  const body = {
+    tx: submitTx,
+    mode: 'sync'
+  }
+  return axios.post(restEndpoint + '/txs', body)
 }
 
 async function getMetadata (address) {
