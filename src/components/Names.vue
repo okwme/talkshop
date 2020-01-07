@@ -53,7 +53,7 @@ export default {
         this.loading = false
         if (res.length === 0) return
         let names = res.data// .split('::::')
-        this.names = names
+        this.names = names.result
         this.checknames()
       })
     },
@@ -72,7 +72,7 @@ export default {
       )
       // this.whois[name] = Object.assign({}, this.whois[name], res.data)
 
-      this.$set(this.whois, name, res.data)
+      this.$set(this.whois, name, res.data.result)
       this.loading = false
     }
   }

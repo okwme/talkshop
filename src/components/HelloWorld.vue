@@ -60,10 +60,8 @@
 </template>
 
 <script>
-
 import VueRecaptcha from 'vue-recaptcha'
 import axios from 'axios'
-
 export default {
   name: 'HelloWorld',
   data () {
@@ -72,7 +70,7 @@ export default {
       address: null,
       sucessfulServerResponse: '',
       serverError: '',
-      google: '6Lc3BZsUAAAAAJXlwIGzPNh0StJ9GuLd0k6L95ur'
+      google: '6LduycwUAAAAABC09STodTUfnEyfifLZ12G_fLmS'
     }
   },
   methods: {

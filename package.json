@@ -1,7 +1,7 @@
 {
   "name": "talkshop",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "A Cosmos-SDK Faucet",
   "author": "Billy Rennekamp <billy.rennekamp@gmail.com>",
   "private": true,
   "scripts": {

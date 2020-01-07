@@ -6,10 +6,10 @@ const wallet = createWalletFromMnemonic(process.env.MNEMONIC); // BIP39 mnemonic
 const address = createAddress(wallet.publicKey); // Buffer or Uint8Array
 const restEndpoint = process.env.URL
 
-// const GoogleRecaptcha = require('google-recaptcha')
-// const googleRecaptcha = new GoogleRecaptcha({
-//   secret: process.env.GOOGLE
-// })
+const GoogleRecaptcha = require('google-recaptcha')
+const googleRecaptcha = new GoogleRecaptcha({
+  secret: process.env.GOOGLE
+})
 
 // // CosmosStation version
 // const cosmosjs = require('@cosmostation/cosmosjs')
@@ -30,14 +30,14 @@ exports.handler = async function (event, context) {
       let body = JSON.parse(event.body)
       console.log({body})
       let recipient = body.recipient
-      // let recaptchaResponse = body.recaptchaToken
-      // let error = await new Promise((resolve, reject) => {
-      //   googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
-      //     if (error) { reject(error) } else { resolve() }
-      //   })
-      // })
-      if (false) {//error) {
-        console.error({src: "google", error})
+      let recaptchaResponse = body.recaptchaToken
+      let error = await new Promise((resolve, reject) => {
+        googleRecaptcha.verify({ response: recaptchaResponse }, async (error) => {
+          if (error) { reject(error) } else { resolve() }
+        })
+      })
+      if (error) {
+        console.error(error)
         return {
           statusCode: 400,
           body: error.message
@@ -45,7 +45,6 @@ exports.handler = async function (event, context) {
       } else {
         try {
           const result = await submitWithTendermintSig(recipient)
-          console.log({result})
           return {
             statusCode: 200,
             body: JSON.stringify(result.data)
