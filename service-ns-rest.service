@@ -1,0 +1,13 @@
+[Unit]
+Description=Run the nameservice rest server
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/root/rest.sh
+
+[Install]
+WantedBy=multi-user.target

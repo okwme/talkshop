@@ -10,7 +10,11 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
-    "proxy": "lcp --proxyUrl http://localhost:1317 --port 1318 --proxyPartial \"\""
+    "proxy-dev": "lcp --proxyUrl http://localhost:1317 --port 1318 --proxyPartial \"\"",
+    "make-service": "cp service-nsd.service /etc/systemd/system/ && systemctl enable service-nsd",
+    "run-service": "systemctl start service-nsd",
+    "make-tmux": "tmux new -s nsd",
+    "join-tmux": "tmux attach -t nsd"
   },
   "dependencies": {
     "@cosmostation/cosmosjs": "https://github.com/cosmostation/cosmosjs#0.4.6",
