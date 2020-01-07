@@ -14,33 +14,35 @@
     # create an account for yourself
     $ nscli keys add YOUR_NAME
 
+    # set your configs
+    $ nscli config chain-id namechain
+    $ nscli node chain-id cli.talkshop.name:80
+    $ nscli config indent true
+    $ nscli config trust-node true
+
     # query an account
-    $ nscli query account $(nscli keys show YOUR_NAME --address) \
-    --indent --chain-id namechain --node=cli.talkshop.name:26657
+    $ nscli query account $(nscli keys show YOUR_NAME --address)
 
     # send some money
     $ nscli tx send --amount 1nametoken \
-    --chain-id namechain  --node=cli.talkshop.name:26657 \
     --from $(nscli keys show YOUR_NAME --address) \
     --to $(nscli keys show THEIR_NAME --address)
 
     # buy a name!
     $ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
-    --from     $(nscli keys show YOUR_NAME --address) \
-    --chain-id namechain --node=cli.talkshop.name:26657
+    --from     $(nscli keys show YOUR_NAME --address)
 
     # set a resolver
     $ nscli tx nameservice set-name SOME_DOMAIN SOME_VALUE\
-    --from     $(nscli keys show YOUR_NAME --address) \
-    --chain-id namechain --node=cli.talkshop.name:26657
+    --from     $(nscli keys show YOUR_NAME --address)
 
     # resolve a name
-    $ nscli query nameservice resolve SOME_DOMAIN \
-    --chain-id namechain --node=cli.talkshop.name:26657
+    $ nscli query nameservice resolve SOME_DOMAIN
 
     # get the whole whois of a name
-    $ nscli query nameservice whois SOME_DOMAIN \
-    --chain-id namechain --node=cli.talkshop.name:26657</textarea
+    $ nscli query nameservice whois SOME_DOMAIN
+    
+</textarea
     >
     <form @submit.prevent="submit">
       <vue-recaptcha
