@@ -16,7 +16,7 @@
 
     # set your configs
     $ nscli config chain-id namechain
-    $ nscli node chain-id cli.talkshop.name:80
+    $ nscli config node cli.talkshop.name:80
     $ nscli config indent true
     $ nscli config trust-node true
 
