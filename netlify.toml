@@ -1,6 +1,6 @@
 # example netlify.toml
 [build]
-  command = "yarn build"
+  command = "npx netlify-lambda build lambda && yarn build"
   functions = "functions" #  netlify-lambda reads this
   publish = "dist"
 
