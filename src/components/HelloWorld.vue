@@ -24,9 +24,10 @@
     $ nscli query account $(nscli keys show YOUR_NAME --address)
 
     # send some money
-    $ nscli tx send --amount 1nametoken \
-    --from $(nscli keys show YOUR_NAME --address) \
-    --to $(nscli keys show THEIR_NAME --address)
+    $ nscli tx send \
+    $(nscli keys show YOUR_NAME --address) \
+    $(nscli keys show THEIR_NAME --address) \
+    1nametoken
 
     # buy a name!
     $ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
