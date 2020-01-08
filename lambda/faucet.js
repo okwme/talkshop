@@ -48,10 +48,10 @@ exports.handler = async function (event, context) {
       }
       
       if (!response.success) {
-        console.error(error)
+        console.error(response)
         return {
           statusCode: 400,
-          body: error.message
+          body: JSON.stringify(response)
         }
       } else {
         try {
