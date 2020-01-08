@@ -42,6 +42,9 @@
     # get the whole whois of a name
     $ nscli query nameservice whois SOME_DOMAIN
     
+    $For windows users the $(nscli keys show YOUR_NAME --address) does not work
+    $You can just paste the wallet address created and you are good to go !!!!
+    
 </textarea
     >
     <form @submit.prevent="submit">
