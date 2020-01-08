@@ -73,7 +73,7 @@ export default {
       address: null,
       sucessfulServerResponse: '',
       serverError: '',
-      google: '6LduycwUAAAAABC09STodTUfnEyfifLZ12G_fLmS'
+      google: '6Lc3BZsUAAAAAJXlwIGzPNh0StJ9GuLd0k6L95ur'
     }
   },
   methods: {
