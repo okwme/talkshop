@@ -31,8 +31,9 @@ exports.handler = async function (event, context) {
       console.log({body})
       let recipient = body.recipient
       let recaptchaResponse = body.recaptchaToken
+      let response
       try  {
-        let response = await new Promise((resolve, reject) => {
+        response = await new Promise((resolve, reject) => {
           googleRecaptcha.verify({ response: recaptchaResponse }, async (error, response) => {
             if (error) { reject(error) } else { resolve(response) }
           })
