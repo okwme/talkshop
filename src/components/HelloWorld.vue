@@ -12,39 +12,42 @@
              ~  ~ ~ ~~~ ~ ~  ~  ~ ~  ~  ~  ~ ~  ~ ~ ~ ~  ~ ~~~
 
     # create an account for yourself
-    $ nscli keys add YOUR_NAME
+    $ nscli keys add {{yourname || 'YOUR_NAME'}}
 
     # set your configs
     $ nscli config chain-id namechain
-    $ nscli config node cli.talkshop.name:80
+    $ nscli config node http://cli.talkshop.name:80
     $ nscli config indent true
     $ nscli config trust-node true
 
     # query an account
-    $ nscli query account $(nscli keys show YOUR_NAME --address)
+    $ nscli query account $(nscli keys show {{yourname || 'YOUR_NAME'}} --address)
 
     # send some money
     $ nscli tx send \
-    $(nscli keys show YOUR_NAME --address) \
-    $(nscli keys show THEIR_NAME --address) \
-    1nametoken
+      $(nscli keys show {{yourname || 'YOUR_NAME'}} --address) \
+      $(nscli keys show {{theirname || 'THEIR_NAME'}} --address) \
+      1nametoken
 
     # buy a name!
     $ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
-    --from     $(nscli keys show YOUR_NAME --address)
+      --from     $(nscli keys show {{yourname || 'YOUR_NAME'}} --address)
 
     # set a resolver
     $ nscli tx nameservice set-name SOME_DOMAIN SOME_VALUE\
-    --from     $(nscli keys show YOUR_NAME --address)
+      --from     $(nscli keys show {{yourname || 'YOUR_NAME'}} --address)
 
     # resolve a name
     $ nscli query nameservice resolve SOME_DOMAIN
 
     # get the whole whois of a name
     $ nscli query nameservice whois SOME_DOMAIN
-    
+
 </textarea
     >
+    <input v-model="yourname" placeholder="YOUR_NAME"><br><br>
+    <input v-model="theirname" placeholder="THEIR_NAME"><br><br>
+
     <form @submit.prevent="submit">
       <vue-recaptcha
         ref="recaptcha"
@@ -69,6 +72,8 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      yourname: null,
+      theirname: null,
       status: null,
       address: null,
       sucessfulServerResponse: '',

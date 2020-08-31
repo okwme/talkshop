@@ -6,17 +6,11 @@ const wallet = createWalletFromMnemonic(process.env.MNEMONIC); // BIP39 mnemonic
 const address = createAddress(wallet.publicKey); // Buffer or Uint8Array
 const restEndpoint = process.env.URL
 
+// const {Bech32} = require("@cosmjs/encoding")
 const GoogleRecaptcha = require('google-recaptcha')
 const googleRecaptcha = new GoogleRecaptcha({
   secret: process.env.GOOGLE
 })
-
-// // CosmosStation version
-// const cosmosjs = require('@cosmostation/cosmosjs')
-// const chainId = process.env.CHAINID
-// const cosmos = cosmosjs.network(restEndpoint, chainId)
-// cosmos.setPath("m/44'/118'/0'/0/0")
-// const ecpairPriv = cosmos.getECPairPriv(process.env.MNEMONIC)
 
 exports.handler = async function (event, context) {
   // let headers = {
@@ -30,6 +24,28 @@ exports.handler = async function (event, context) {
       let body = JSON.parse(event.body)
       console.log({body})
       let recipient = body.recipient
+
+      // let foo
+      // try {
+      //   foo = Bech32.decode(recipient)
+      //   console.log({foo})
+      // } catch (err) {
+      //   console.log({err})
+      //   console.log("NEED TO RESOLVE")
+
+      //   recipient = await getValue(recipient)
+      //   try {
+      //     foo = Bech32.decode(recipient)
+      //   } catch (err) {
+      //     console.log("STILL NEED TO RESOLVE")
+      //     return {
+      //       statusCode: 400,
+      //       body: JSON.stringify(err)
+      //     }
+      //   }
+      // }
+
+
       let recaptchaResponse = body.recaptchaToken
       let response
       try  {
@@ -78,26 +94,6 @@ exports.handler = async function (event, context) {
   }
 }
 
-// async function submitWithCosmosStation(recipient) {
-//   const data = await cosmos.getAccounts(address)
-//   let stdSignMsg = cosmos.NewStdMsg({
-//     type: 'cosmos-sdk/MsgSend',
-//     from_address: address,
-//     to_address: recipient,
-//     amountDenom: 'nametoken',
-//     amount: 1,
-//     feeDenom: 'nametoken',
-//     fee: 0,
-//     gas: 200000,
-//     memo: '',
-//     account_number: data.result.value.account_number,
-//     sequence: data.result.value.sequence
-//   })
-//   const signedTx = cosmos.sign(stdSignMsg, ecpairPriv)
-//   const response = await cosmos.broadcast(signedTx)
-//   // console.log({response})
-//   return response
-// }
 
 async function submitWithTendermintSig(recipient) {
   const tx = {
@@ -143,6 +139,12 @@ async function getMetadata (address) {
   // console.log(response.data.result)
   return response.data.result
 }
+
+// async function getValue (name) {
+//   let response = await axios.get(restEndpoint + '/nameservice/names/' + name)
+//   return response.data.result.value
+
+// }
 
 function handleAxiosError (error) {
   console.error(error)
