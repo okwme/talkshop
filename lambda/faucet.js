@@ -111,6 +111,7 @@ async function submitWithTendermintSig(recipient) {
         }
     }]
   };
+  console.log({tx})
   const signMeta = (await getMetadata(address)).value
   signMeta.chain_id = process.env.CHAINID
   const stdTx = signTx(tx, signMeta, wallet); // Wallet or privateKey / publicKey pair; see example above
@@ -136,7 +137,7 @@ async function submitWithTendermintSig(recipient) {
 
 async function getMetadata (address) {
   let response = await axios.get(restEndpoint + '/auth/accounts/' + address)
-  // console.log(response.data.result)
+  console.log(response.data.result)
   return response.data.result
 }
 
