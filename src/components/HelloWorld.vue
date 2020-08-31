@@ -45,6 +45,7 @@
 
 </textarea
     >
+    <br>
     <input v-model="yourname" placeholder="YOUR_NAME"><br><br>
     <input v-model="theirname" placeholder="THEIR_NAME"><br><br>
 
