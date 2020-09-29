@@ -57,7 +57,7 @@ export default {
         this.checknames()
       })
     },
-    checknames (num = 0) {
+    checknames () {
       for (let i = 0; i < this.names.length; i++) {
         this.checkname(i)
       }

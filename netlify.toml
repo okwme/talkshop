@@ -1,7 +1,10 @@
 # example netlify.toml
+[dev]
+    command = "yarn serve"
+
 [build]
-  command = "npx netlify-lambda build lambda && yarn build"
-  functions = "functions" #  netlify-lambda reads this
+  command = "yarn build"
+  functions = "functions/" #  netlify-lambda reads this
   publish = "dist"
 
 # [[redirects]]
@@ -9,12 +12,12 @@
 #   to = "/.netlify/functions/faucet?address=:address"
 #   status = 200
 
-[[redirects]]
-  from = "/faucet"
-  to = "/.netlify/functions/faucet"
-  status = 200
+# [[redirects]]
+#  from = "/faucet"
+#  to = "/.netlify/functions/faucet"
+#  status = 200
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# [[redirects]]
+#  from = "/*"
+#  to = "/index.html"
+#  status = 200
