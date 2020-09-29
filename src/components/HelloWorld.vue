@@ -1,59 +1,59 @@
 <template>
   <div class="hello">
-    <textarea spellcheck="false">
-                _  _ __, _,   _,  _, _, _ __,   ___  _,
-                |  | |_  |   / ` / \ |\/| |_     |  / \
-                |/\| |   | , \ , \ / |  | |      |  \ /
-                ~  ~ ~~~ ~~~  ~   ~  ~  ~ ~~~    ~   ~
+    <pre spellcheck="false"  multi-line>
+        _  _ __, _,   _,  _, _, _ __,   ___  _,
+        |  | |_  |   / ` / \ |\/| |_     |  / \
+        |/\| |   | , \ , \ / |  | |      |  \ /
+        ~  ~ ~~~ ~~~  ~   ~  ~  ~ ~~~    ~   ~
 
-            ___  _, _,  _,_  _, _,_  _, __,  _, _  _, _, _ __,
-             |  /_\ |   |_/ (_  |_| / \ |_)  |\ | /_\ |\/| |_
-             |  | | | , | \ , ) | | \ / |  , | \| | | |  | |
-             ~  ~ ~ ~~~ ~ ~  ~  ~ ~  ~  ~  ~ ~  ~ ~ ~ ~  ~ ~~~
+      ___  _, _,  _,_  _, _,_  _, __,  _, _  _, _, _ __,
+      |  /_\ |   |_/ (_  |_| / \ |_)  |\ | /_\ |\/| |_
+      |  | | | , | \ , ) | | \ / |  , | \| | | |  | |
+      ~  ~ ~ ~~~ ~ ~  ~  ~ ~  ~  ~  ~ ~  ~ ~ ~ ~  ~ ~~~
 
-    # create an account for yourself
-    $ nscli keys add {{yourname || 'YOUR_NAME'}}
+# create an account for yourself
+$ nscli keys add YOUR_NAME
 
-    # set your configs
-    $ nscli config chain-id namechain
-    $ nscli config node http://cli.talkshop.name:80
-    $ nscli config indent true
-    $ nscli config trust-node true
+# set your configs
+$ nscli config chain-id namechain
+$ nscli config node http://cli.talkshop.name:80
+$ nscli config indent true
+$ nscli config trust-node true
 
-    # query an account
-    $ nscli query account $(nscli keys show {{yourname || 'YOUR_NAME'}} --address)
+# query an account
+$ nscli query account $(nscli keys show YOUR_NAME --address)
 
-    # send some money
-    $ nscli tx send \
-      $(nscli keys show {{yourname || 'YOUR_NAME'}} --address) \
-      $(nscli keys show {{theirname || 'THEIR_NAME'}} --address) \
-      1nametoken
+# send some money
+$ nscli tx send \
+  $(nscli keys show YOUR_NAME --address) \
+  $(nscli keys show THEIR_NAME --address) \
+  1nametoken
 
-    # buy a name!
-    $ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
-      --from     $(nscli keys show {{yourname || 'YOUR_NAME'}} --address)
+# buy a name!
+$ nscli tx nameservice buy-name SOME_DOMAIN 5nametoken \
+  --from     $(nscli keys show YOUR_NAME --address)
 
-    # set a resolver
-    $ nscli tx nameservice set-name SOME_DOMAIN SOME_VALUE\
-      --from     $(nscli keys show {{yourname || 'YOUR_NAME'}} --address)
+# set a resolver
+$ nscli tx nameservice set-name SOME_DOMAIN SOME_VALUE\
+  --from     $(nscli keys show YOUR_NAME --address)
 
-    # resolve a name
-    $ nscli query nameservice resolve SOME_DOMAIN
+# resolve a name
+$ nscli query nameservice resolve SOME_DOMAIN
 
-    # get the whole whois of a name
-    $ nscli query nameservice whois SOME_DOMAIN
+# get the whole whois of a name
+$ nscli query nameservice whois SOME_DOMAIN
 
-</textarea
+</pre
     >
     <br>
-    <input v-model="yourname" placeholder="YOUR_NAME"><br><br>
-    <input v-model="theirname" placeholder="THEIR_NAME"><br><br>
 
     <form @submit.prevent="submit">
       <vue-recaptcha
         ref="recaptcha"
         @verify="onCaptchaVerified"
         @expired="onCaptchaExpired"
+        @error="onCaptchaError"
+        @render="onCaptchaRender"
         size="invisible"
         :sitekey="google">
       </vue-recaptcha>
@@ -84,8 +84,16 @@ export default {
   },
   methods: {
     submit: function () {
+      // console.log(this.$refs.recaptcha.execute())
       this.status = 'submitting'
+      // this.$refs.recaptcha.reset()
       this.$refs.recaptcha.execute()
+    },
+    onCaptchaRender: function(id) {
+      console.log({id})
+    },
+    onCaptchaError: function(error) {
+      console.log({error})
     },
     onCaptchaVerified: async function (recaptchaToken) {
       const self = this
@@ -141,10 +149,11 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-textarea {
+pre {
+  white-space: pre-wrap;
   text-align: left;
   width: 100%;
-  max-width: 580px;
+  max-width: 600px;
   height: 400px;
   font-size: 14px;
   font-family: monospace;
@@ -154,6 +163,8 @@ textarea {
   color: white;
   border: 0px;
   border-radius: 20px;
+  margin: auto;
+  overflow: auto;
 }
 li {
   display: inline-block;
