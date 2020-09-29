@@ -1,3 +1,2 @@
-/foo /test.html 200
 /faucet /.netlify/functions/faucet 200
 /*   /index.html   200

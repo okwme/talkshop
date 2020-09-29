@@ -12,10 +12,10 @@
 #   to = "/.netlify/functions/faucet?address=:address"
 #   status = 200
 
-# [[redirects]]
-#  from = "/faucet"
-#  to = "/.netlify/functions/faucet"
-#  status = 200
+[[redirects]]
+ from = "/faucet"
+ to = "/.netlify/functions/faucet"
+ status = 200
 
 # [[redirects]]
 #  from = "/*"
